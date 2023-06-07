@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 const authRouter = require("./routes/auth");
 const adminRouter = require("./routes/admin");
-
+const productRouter = require("./routes/product");
 // INITIALAISATION
 const PORT = 3000;
 const app = express();
@@ -16,6 +16,7 @@ const DB = "mongodb+srv://Nidhin:Nidhin2020@cluster0.zajzym3.mongodb.net/";
 app.use(express.json());
 app.use(authRouter);
 app.use(adminRouter);
+app.use(productRouter);
 
 //CONNECTIONS
 mongoose
