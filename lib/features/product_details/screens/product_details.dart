@@ -8,6 +8,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../constants/global_variable.dart';
 import '../../search/screens/search_screen.dart';
+import '../services/product_details_services.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   static const String routeName = '/product-details';
@@ -22,6 +23,8 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  final ProductDetailsService productDetailsService = ProductDetailsService();
+
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
@@ -228,7 +231,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   color: GlobalVariables.secondaryColor,
                 );
               },
-              onRatingUpdate: (value) {},
+              onRatingUpdate: (rating) {
+                productDetailsService.rateProduct(
+                  context: context,
+                  product: widget.product,
+                  rating: rating,
+                );
+              },
             )
           ],
         ),
