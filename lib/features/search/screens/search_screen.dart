@@ -1,28 +1,48 @@
+import 'package:e_commerce/constants/loader.dart';
 import 'package:e_commerce/features/home/widgets/address_bar.dart';
-import 'package:e_commerce/features/home/widgets/carosal_image.dart';
-import 'package:e_commerce/features/home/widgets/category_list.dart';
-import 'package:e_commerce/features/home/widgets/deal_of_day.dart';
+import 'package:e_commerce/features/search/services/search_service.dart';
+import 'package:e_commerce/features/search/widgets/searched_product.dart';
+import 'package:e_commerce/models/product.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/global_variable.dart';
-import '../../search/screens/search_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const String routeName = '/home-screen';
-  const HomeScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  static const String routeName = '/search-screen';
+  final String searchQuery;
+  const SearchScreen({
+    Key? key,
+    required this.searchQuery,
+  }) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _SearchScreenState extends State<SearchScreen> {
+  List<Product>? products;
+  final SearchService searchService = SearchService();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSearchedProducts();
+  }
+
+  fetchSearchedProducts() async {
+    products = await searchService.fetchSearchProducts(
+      context: context,
+      searchQuery: widget.searchQuery,
+    );
+    setState(() {});
+  }
+
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
 
   @override
   Widget build(BuildContext context) {
-    //final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -100,18 +120,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            AddressBox(),
-            SizedBox(height: 10),
-            TopCategories(),
-            SizedBox(height: 10),
-            CarouselImage(),
-            DealOfDay(),
-          ],
-        ),
-      ),
+      body: products == null
+          ? const Loader()
+          : Column(
+              children: [
+                const AddressBox(),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: products!.length,
+                    itemBuilder: (context, index) {
+                      return SearcheProduch(
+                        product: products![index],
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
     );
   }
 }

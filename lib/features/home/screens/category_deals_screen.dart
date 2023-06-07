@@ -1,5 +1,6 @@
 import 'package:e_commerce/constants/loader.dart';
 import 'package:e_commerce/features/home/services/home_services.dart';
+import 'package:e_commerce/features/search/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/global_variable.dart';
