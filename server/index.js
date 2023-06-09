@@ -9,7 +9,7 @@ const adminRouter = require("./routes/admin");
 const productRouter = require("./routes/product");
 const userRouter = require("./routes/user");
 // INITIALAISATION
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const app = express();
 const DB = "mongodb+srv://Nidhin:Nidhin2020@cluster0.zajzym3.mongodb.net/";
 
