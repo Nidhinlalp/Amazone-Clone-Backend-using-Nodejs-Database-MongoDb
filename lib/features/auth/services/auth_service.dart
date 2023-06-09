@@ -42,8 +42,10 @@ class AuthService {
           response: response,
           context: context,
           onSuccess: () {
-            showSnackBar(context,
-                "Accout created successfully Login with the same credentials");
+            showSnackBar(
+              context,
+              "Accout created successfully Login with the same credentials",
+            );
           },
         );
       }
@@ -78,17 +80,22 @@ class AuthService {
           onSuccess: () async {
             SharedPreferences preferences =
                 await SharedPreferences.getInstance();
-            Provider.of<UserProvider>(context, listen: false)
-                .setUser(response.body);
+            if (context.mounted) {
+              Provider.of<UserProvider>(context, listen: false).setUser(
+                response.body,
+              );
+            }
             preferences.setString(
               'x-auth-token',
               jsonDecode(response.body)['token'],
             );
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              BottomBar.routeName,
-              (route) => false,
-            );
+            if (context.mounted) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                BottomBar.routeName,
+                (route) => false,
+              );
+            }
           },
         );
       }
