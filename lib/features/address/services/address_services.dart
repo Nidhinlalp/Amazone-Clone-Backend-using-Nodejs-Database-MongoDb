@@ -101,14 +101,15 @@ class AddressServices {
           'id': product.id,
         }),
       );
-
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          onSuccess();
-        },
-      );
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            onSuccess();
+          },
+        );
+      }
     } catch (e) {
       showSnackBar(context, e.toString());
     }

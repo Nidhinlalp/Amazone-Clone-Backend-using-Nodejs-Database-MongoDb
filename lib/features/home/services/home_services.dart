@@ -65,14 +65,15 @@ class HomeService {
         'Content-Type': 'application/json; charset=UTF-8',
         'x-auth-token': userProvider.user.token,
       });
-
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          product = Product.fromJson(res.body);
-        },
-      );
+      if (context.mounted) {
+        httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            product = Product.fromJson(res.body);
+          },
+        );
+      }
     } catch (e) {
       showSnackBar(context, e.toString());
     }

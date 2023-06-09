@@ -65,16 +65,16 @@ class SearcheProduch extends StatelessWidget {
                   Container(
                     width: 200,
                     padding: const EdgeInsets.only(left: 10),
-                    child: Text(
+                    child: const Text(
                       'Eligible for FREE Shipping',
                     ),
                   ),
                   Container(
                     width: 200,
                     padding: const EdgeInsets.only(left: 10, top: 5),
-                    child: Text(
+                    child: const Text(
                       'In Stock',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.teal,
                       ),
                       maxLines: 2,

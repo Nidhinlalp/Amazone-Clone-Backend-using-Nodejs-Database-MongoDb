@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:e_commerce/constants/error_handling.dart';
 import 'package:e_commerce/constants/global_variable.dart';
 import 'package:e_commerce/constants/utils.dart';
-import 'package:e_commerce/features/account/widgets/order.dart';
 import 'package:e_commerce/features/admin/model/sales.dart';
 import 'package:e_commerce/models/product.dart';
 import 'package:e_commerce/provider/user_provider.dart';
