@@ -1,3 +1,4 @@
+import 'package:e_commerce/features/address/screens/address_screen.dart';
 import 'package:e_commerce/features/cart/widgets/cart_subtotal.dart';
 import 'package:e_commerce/features/home/widgets/address_bar.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,18 @@ class _CartScreenState extends State<CartScreen> {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
 
+  void navigateToAddressScreen(int sum) {
+    Navigator.pushNamed(context, AddressScreen.routeName,
+        arguments: sum.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
+    int sum = 0;
+    user.cart
+        .map((e) => sum += e['quantity'] * e['product']['price'] as int)
+        .toList();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -104,12 +114,12 @@ class _CartScreenState extends State<CartScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            AddressBox(),
+            const AddressBox(),
             const CartSubtotal(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomButton(
-                onTap: () {},
+                onTap: () => navigateToAddressScreen(sum),
                 text: 'Proceed to Buy (${user.cart.length} items)',
                 color: Colors.yellow,
               ),

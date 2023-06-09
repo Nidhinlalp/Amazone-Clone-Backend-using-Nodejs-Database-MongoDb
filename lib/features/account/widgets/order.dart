@@ -1,6 +1,10 @@
 import 'package:e_commerce/constants/global_variable.dart';
+import 'package:e_commerce/features/account/services/account_services.dart';
 import 'package:e_commerce/features/account/widgets/single_product.dart';
+import 'package:e_commerce/features/order_details/screens/order_details_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../../../models/order.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -12,64 +16,81 @@ class Orders extends StatefulWidget {
 class _OrdersState extends State<Orders> {
   // temporarys lis
 
-  List list = [
-    'https://tse2.mm.bing.net/th?id=OIP.lHS86P4wMEe_v5jJtTb4mAHaFW&pid=Api&P=0&h=180',
-    'https://tse2.mm.bing.net/th?id=OIP.lHS86P4wMEe_v5jJtTb4mAHaFW&pid=Api&P=0&h=180',
-    'https://tse2.mm.bing.net/th?id=OIP.lHS86P4wMEe_v5jJtTb4mAHaFW&pid=Api&P=0&h=180',
-    'https://tse2.mm.bing.net/th?id=OIP.lHS86P4wMEe_v5jJtTb4mAHaFW&pid=Api&P=0&h=180',
-  ];
+  List<Order>? orders;
+  final AccountService accountService = AccountService();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchOrder();
+  }
+
+  fetchOrder() async {
+    orders = await accountService.fetchMyOrders(
+      context: context,
+    );
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(
-                left: 15,
+    return orders == null
+        ? const LinearProgressIndicator()
+        : Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                      left: 15,
+                    ),
+                    child: const Text(
+                      'Your Order',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                      right: 15,
+                    ),
+                    child: Text(
+                      'See all',
+                      style: TextStyle(
+                        color: GlobalVariables.selectedNavBarColor,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              child: const Text(
-                'Your Order',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+              Container(
+                height: 170,
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  top: 20,
+                  right: 0,
                 ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(
-                right: 15,
-              ),
-              child: Text(
-                'See all',
-                style: TextStyle(
-                  color: GlobalVariables.selectedNavBarColor,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: orders!.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        OrderDetailScreen.routeName,
+                        arguments: orders![index],
+                      ),
+                      child: SingleProduct(
+                        image: orders![index].products[0].images[0],
+                      ),
+                    );
+                  },
                 ),
-              ),
-            )
-          ],
-        ),
-
-//// display orders
-        Container(
-          height: 170,
-          padding: const EdgeInsets.only(
-            left: 10,
-            top: 20,
-            right: 0,
-          ),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: list.length,
-            itemBuilder: (context, index) {
-              return SingleProduct(
-                image: list[index],
-              );
-            },
-          ),
-        )
-      ],
-    );
+              )
+            ],
+          );
   }
 }
